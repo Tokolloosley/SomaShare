@@ -1,0 +1,83 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SomaShare.Models
+@inject UserManager<ApplicationUser> UserManager
+@{
+    ViewData["Title"] = "Home Page - SomaShare";
+
+    var currentUser = await UserManager.GetUserAsync(User);
+    var culture =
+        Context.Request.Cookies["culture"]
+        ?? "en";
+}
+
+<div class="text-center">
+
+    @if (User.Identity != null && User.Identity.IsAuthenticated && currentUser != null)
+    {
+        <h1 class="display-4">
+            @LanguageHelper.Welcome(culture)
+        </h1>
+        //<h1>@Localizer["Welcome"], @currentUser.FirstName!</h1>
+    }
+    else
+    {
+        <h1 class="display-4">
+            Welcome to SomaShare
+        </h1>
+    }
+
+    <p>Your online marketplace for buying and selling textbooks</p>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">📚 Browse Books</h5>
+                <p class="card-text">
+                    Explore thousands of textbooks at affordable prices
+                </p>
+
+                <a href="@Url.Action("Index", "Textbooks")"
+                   class="btn btn-primary">
+                    Browse
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">💰 Sell Books</h5>
+                <p class="card-text">
+                    List your textbooks and earn money from them
+                </p>
+
+                <a href="@Url.Action("Create", "Textbooks")"
+                   class="btn btn-primary">
+                    List Book
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">🔍 Want to Buy?</h5>
+                <p class="card-text">
+                    Post what you're looking for and get offers
+                </p>
+
+                <a href="@Url.Action("Create", "WantedAds")"
+                   class="btn btn-primary">
+                    Post Ad
+                </a>
+            </div>
+        </div>
+    </div>
+
+</div>

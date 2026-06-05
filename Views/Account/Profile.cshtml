@@ -1,0 +1,24 @@
+﻿@model SomaShare.Models.ApplicationUser
+
+<h2>My Profile</h2>
+
+<div class="card p-3">
+
+    <h4>
+        @Model.FirstName @Model.LastName
+    </h4>
+
+    <p>Email: @Model.Email</p>
+
+    <p>Transactions: @Model.TotalTransactions</p>
+
+    <p>Average Rating: @Model.AverageRating</p>
+
+    <p>
+        <strong>
+            Community Trust Score:
+            @Model.TrustScore
+        </strong>
+    </p>
+
+</div>

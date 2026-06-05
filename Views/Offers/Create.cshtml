@@ -1,0 +1,50 @@
+﻿@model SomaShare.Models.Offer
+
+@{
+    ViewData["Title"] = "Make an Offer";
+}
+
+<h1>Make an Offer</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <input type="hidden" asp-for="TextbookId" />
+            <input type="hidden" asp-for="SellerId" />
+
+            <div class="mb-3">
+                <label class="form-label">Book</label>
+                <input type="text" class="form-control" value="@Model.Textbook?.Title" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Asking Price</label>
+                <input type="text" class="form-control" value="R @Model.Textbook?.AskingPrice.ToString("N2")" disabled />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="OfferPrice" class="form-label"></label>
+                <div class="input-group">
+                    <span class="input-group-text">R</span>
+                    <input asp-for="OfferPrice" type="number" step="0.01" class="form-control" />
+                </div>
+                <span asp-validation-for="OfferPrice" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Message" class="form-label"></label>
+                <textarea asp-for="Message" class="form-control" rows="4" placeholder="Optional message to seller..."></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Submit Offer</button>
+            <a href="@Url.Action("Index", "Textbooks")" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

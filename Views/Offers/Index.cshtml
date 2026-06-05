@@ -1,0 +1,62 @@
+﻿@model IEnumerable<SomaShare.Models.Offer>
+
+@{
+    ViewData["Title"] = "Offers";
+}
+
+<h2>My Offers</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Textbook</th>
+            <th>Offer Price</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Textbook?.Title</td>
+                <td>R @item.OfferPrice</td>
+                <td>@item.Status</td>
+                <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+
+                <td>
+                    @if (item.Status == "Pending")
+                    {
+                        <form asp-action="Accept"
+                              asp-route-id="@item.Id"
+                              method="post"
+                              style="display:inline">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-success btn-sm">
+                                Accept
+                            </button>
+                        </form>
+
+                        <form asp-action="Reject"
+                              asp-route-id="@item.Id"
+                              method="post"
+                              style="display:inline">
+
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-sm">
+                                Reject
+                            </button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
