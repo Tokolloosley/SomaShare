@@ -1,0 +1,79 @@
+﻿@model IEnumerable<SomaShare.Models.Textbook>
+
+@{
+    ViewData["Title"] = "Browse Textbooks";
+}
+
+<h1>Available Textbooks</h1>
+
+@if (User.IsInRole("Seller") || User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-success mb-3">+ List New Book</a>
+}
+
+@if (Model.Count() == 0)
+{
+    <p>No textbooks available at the moment.</p>
+}
+else
+{
+    <form method="get">
+
+        <input type="text"
+               name="searchTerm"
+               class="form-control mb-2"
+               placeholder="Search Title, ISBN, Author, Course Code" />
+
+        <button class="btn btn-primary">
+            Search
+        </button>
+
+    </form>
+    <div class="row">
+        @foreach (var textbook in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <img src="@textbook.ImageUrl" class="card-img-top" alt="@textbook.Title" style="height: 300px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@textbook.Title</h5>
+                        <p class="card-text">
+                            <strong>Author:</strong> @textbook.Author<br>
+                            <strong>Edition:</strong> @textbook.Edition<br>
+                            <strong>Condition:</strong> <span class="badge bg-info">@textbook.Condition</span><br>
+                            <strong>ISBN:</strong> @textbook.ISBN
+                        </p>
+                        <p class="card-text">@textbook.Description</p>
+                        <p class="text-muted">Listed by: <strong>@textbook.Seller.FirstName @textbook.Seller.LastName</strong></p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="text-success mb-0">R @textbook.AskingPrice.ToString("N2")</h4>
+                            <a asp-action="Details" asp-route-id="@textbook.Id" class="btn btn-primary btn-sm">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <ul class="pagination">
+
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-page="@i">
+
+                                @i
+
+                            </a>
+
+                        </li>
+                    }
+
+                </ul>
+            </nav>
+        }
+    </div>
+}

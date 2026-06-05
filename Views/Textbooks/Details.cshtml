@@ -1,0 +1,68 @@
+﻿@model SomaShare.Models.Textbook
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Title">
+    </div>
+    <div class="col-md-6">
+        <h1>@Model.Title</h1>
+        
+        <p class="lead text-success" style="font-size: 2rem;">R @Model.AskingPrice.ToString("N2")</p>
+
+        <table class="table">
+            <tr>
+                <td><strong>Author:</strong></td>
+                <td>@Model.Author</td>
+            </tr>
+            <tr>
+                <td><strong>ISBN:</strong></td>
+                <td>@Model.ISBN</td>
+            </tr>
+            <tr>
+                <td><strong>Edition:</strong></td>
+                <td>@Model.Edition</td>
+            </tr>
+            <tr>
+                <td><strong>Condition:</strong></td>
+                <td><span class="badge bg-info">@Model.Condition</span></td>
+            </tr>
+            <tr>
+                <td><strong>Listed Date:</strong></td>
+                <td>@Model.ListedDate.ToString("MMM dd, yyyy")</td>
+            </tr>
+        </table>
+
+        <p class="mt-4">@Model.Description</p>
+
+        <div class="mt-4">
+            <strong>Seller Information:</strong><br>
+            <p>
+                @Model.Seller.FirstName @Model.Seller.LastName<br>
+                <small class="text-muted">Member since @Model.Seller.RegistrationDate.ToString("MMM dd, yyyy")</small><br>
+                <span class="badge bg-warning">Rating: @Model.Seller.AverageRating ⭐</span>
+            </p>
+        </div>
+
+        @if (Model.IsAvailable)
+        {
+            @if (User.Identity.IsAuthenticated && !User.IsInRole("Seller"))
+            {
+                <a asp-controller="Offers" asp-action="Create" asp-route-textbookId="@Model.Id" class="btn btn-success btn-lg">Make an Offer</a>
+            }
+        }
+        else
+        {
+            <span class="badge bg-danger">Not Available</span>
+        }
+
+        @if (User.Identity.IsAuthenticated && User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value == Model.SellerId)
+        {
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+        }
+    </div>
+</div>
